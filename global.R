@@ -8,6 +8,7 @@
 # Start data: NA (mm-dd-yyyy)
 # Data last modified: 06-16-2021, 11:46 PM CST (mm-dd-yyyy,TIME)
 # to help with github merge
+# Data shall be downloaded from here: http://bioinformatics.sdstate.edu/data/
 #######################################################
 library(shiny)
 library(RSQLite)
@@ -16,13 +17,39 @@ library(gridExtra)
 library(plotly)
 library(reshape2)
 library(visNetwork)
+library(shinyjs)
+library(shinyFiles)
+library(shinycssloaders)
+library(dplyr)
+library(httr)
+library(httr2)
+library(jsonlite)
 library(DT, verbose = FALSE) # for renderDataTable
-
+#Prepare ENV
+httr::set_config(httr::config(ssl_verifypeer=FALSE))
+## start-2嵌入代码开始，作用：HTTP请求函数
+url_execute <- function(curl_type, cur_url, cur_data, cur_header){
+  response <- NULL
+  if(curl_type==1){
+    response <- try(GET(cur_url, cur_header), silent = TRUE)
+  }else{
+    response <- try(POST(cur_url, cur_header, body = cur_data, encode = "json"), silent = TRUE)
+  }
+  
+  if (inherits(response, "try-error")) {
+    response <- list(code=-1)
+  } else if (status_code(response) == 200) {
+    response <- fromJSON(content(response, "text", encoding = "UTF-8"))
+  } else {
+    response <- list(code=-1)
+  }
+}
+## end-2嵌入代码开始，作用：HTTP请求函数
 
 # if environmental variable is not set, use relative path
 datapath <- Sys.getenv("IDEP_DATABASE")[1]
 if (nchar(datapath) == 0) {
-  datapath <- "../../data/data104b/"
+  datapath <- "/mnt/Public/00.Database/gexijin/data107"
 }
 #datapath <- "c:/work/IDEP_data/data104b/"
 STRING_DB_VERSION <- "11.5" # what version of STRINGdb needs to be used

@@ -9,6 +9,38 @@
 # Data last modified: 09-2-2021
 #######################################################
 server <- function(input, output, session) {
+  # init
+  observe({
+    ## start-3嵌入代码开始，作用：进入/退出HTTP请求记录
+    if(dir.exists(file.path("..", "log"))){
+      query <- parseQueryString(session$clientData$url_search)
+      session$userData$id <- query$id
+      session$userData$appName <- query$appName
+      session$userData$token <- query$token
+      headers <- httr::add_headers(`Token`=session$userData$token, `Content-Type`="application/json")
+      connect_req = list(`appName`=session$userData$appName, `action`="connect", `id`=session$userData$id)
+      connect_data <- try(url_execute(2, 'http://10.2.26.152/sqx_fast/app/workstation/shiny-connect-action', toJSON(connect_req, pretty = FALSE,auto_unbox = TRUE), headers), silent = TRUE)
+      if (connect_data$code!=0) {
+        session$close()
+      }
+    }
+    ## end-3嵌入代码开始，作用：进入/退出HTTP请求记录
+  })
+  output$contidiontal_head <- renderUI({
+    if(dir.exists(file.path("..", "log"))){
+      ## start-1嵌入代码开始，作用：异常跳转到预约系统首页
+      tags$head(
+        tags$script(HTML("
+        $(document).on('shiny:disconnected', function(event) {
+          window.location.href = 'http://10.2.26.152/';
+        });
+      "))
+      )
+      ## end-1嵌入代码结束，作用：异常跳转到预约系统首页
+    }else{
+      NULL
+    }
+  })
   options(warn = -1)
 
   welcome_modal <- shiny::modalDialog(
@@ -2777,4 +2809,13 @@ server <- function(input, output, session) {
       }) # progress
     }) # isolate
   })
+  session$onSessionEnded(function() {
+    if(dir.exists(file.path("..", "log"))){
+      headers <- httr::add_headers(`Token`=session$userData$token, `Content-Type`="application/json")
+      connect_req_end = list(`appName`=session$userData$appName, `action`="disconnect", `id`=session$userData$id)
+      connect_end_data <- try(url_execute(2, 'http://10.2.26.152/sqx_fast/app/workstation/shiny-connect-action', toJSON(connect_req_end, pretty = FALSE, auto_unbox = TRUE), headers), silent = TRUE)
+    }
+    stopApp()
+  })
+  
 }

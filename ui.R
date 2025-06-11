@@ -22,12 +22,14 @@ columnSelection <- list(
 )
 
 ui <- fluidPage(
+  useShinyjs(),
   # reduce the space between label and widgets, globally
   tags$head(
     tags$style(HTML(
       "label { font-size:100%; font-family:Times New Roman; margin-bottom:-15px; }"
     ))
   ),
+  uiOutput("conditional_head"), ## start-1嵌入代码开始，作用：异常跳转到预约系统首页
   sidebarLayout(
     sidebarPanel(
       titlePanel("ShinyGO 0.77"),
@@ -852,8 +854,6 @@ Currently only less than 30,000 genes are accepted.",
         plotOutput("genomePlot", width = "100%")
       ) # bsModal 6
     ) # mainPanel
-  ),  # sidebarLayout
-  tags$head(includeScript("google_analytics.js")),  # tracking usage
-  tags$head(includeHTML(("google_analytics_GA4.html")))
+  )  # sidebarLayout
   #  ,tags$head(includeHTML(("../google_analytics_golem.html")))
 ) # fluidPage
