@@ -10,6 +10,10 @@
 # to help with github merge
 # Data shall be downloaded from here: http://bioinformatics.sdstate.edu/data/
 #######################################################
+options(
+  repos = c(CRAN = "https://cloud.r-project.org"),  # Use cloud CRAN mirror
+  install.packages.check.source = "no"              # Optional: avoid source compilation prompts
+)
 library(shiny)
 library(RSQLite)
 library(ggplot2)
@@ -25,6 +29,8 @@ library(httr)
 library(httr2)
 library(jsonlite)
 library(DT, verbose = FALSE) # for renderDataTable
+if (!require("BiocManager", quietly = TRUE)){install.packages("BiocManager", dependencies = TRUE, quiet = TRUE)}
+if (!require("STRINGdb", quietly = TRUE)){BiocManager::install("STRINGdb", update = TRUE, ask = FALSE)}
 #Prepare ENV
 httr::set_config(httr::config(ssl_verifypeer=FALSE))
 ## start-2嵌入代码开始，作用：HTTP请求函数
