@@ -23,6 +23,16 @@ columnSelection <- list(
 
 ui <- fluidPage(
   useShinyjs(),
+  tags$head(
+    # Embed Google Analytics
+    tags$script(async = NA, src = "https://www.googletagmanager.com/gtag/js?id=G-RWF876HNKW"),
+    tags$script(HTML("
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RWF876HNKW');
+    "))
+  ),
   # reduce the space between label and widgets, globally
   tags$head(
     tags$style(HTML(
@@ -855,5 +865,4 @@ Currently only less than 30,000 genes are accepted.",
       ) # bsModal 6
     ) # mainPanel
   )  # sidebarLayout
-  #  ,tags$head(includeHTML(("../google_analytics_golem.html")))
 ) # fluidPage
