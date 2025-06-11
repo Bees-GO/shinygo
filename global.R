@@ -49,7 +49,7 @@ url_execute <- function(curl_type, cur_url, cur_data, cur_header){
 # if environmental variable is not set, use relative path
 datapath <- Sys.getenv("IDEP_DATABASE")[1]
 if (nchar(datapath) == 0) {
-  datapath <- "/mnt/Public/00.Database/gexijin/data107"
+  datapath <- "/mnt/Public/00.Database/gexijin/data107/db/"
 }
 #datapath <- "c:/work/IDEP_data/data104b/"
 STRING_DB_VERSION <- "11.5" # what version of STRINGdb needs to be used
