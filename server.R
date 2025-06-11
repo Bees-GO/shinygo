@@ -26,7 +26,7 @@ server <- function(input, output, session) {
     }
     ## end-3嵌入代码开始，作用：进入/退出HTTP请求记录
   })
-  output$contidiontal_head <- renderUI({
+  output$conditional_head <- renderUI({
     if(dir.exists(file.path("..", "log"))){
       ## start-1嵌入代码开始，作用：异常跳转到预约系统首页
       tags$head(
