@@ -14,6 +14,9 @@ options(
   repos = c(CRAN = "https://cloud.r-project.org"),  # Use cloud CRAN mirror
   install.packages.check.source = "no"              # Optional: avoid source compilation prompts
 )
+if (!require("reactable", quietly = TRUE)){install.packages("reactable", repos="https://cloud.r-project.org", dependencies = TRUE, quiet = TRUE)}
+if (!require("plotly", quietly = TRUE)){install.packages("plotly", repos="https://cloud.r-project.org", dependencies = TRUE, quiet = TRUE)}
+if (!require("shinycssloaders", quietly = TRUE)){install.packages("shinycssloaders", repos="https://cloud.r-project.org", dependencies = TRUE, quiet = TRUE)}
 library(shiny)
 library(RSQLite)
 library(ggplot2)
